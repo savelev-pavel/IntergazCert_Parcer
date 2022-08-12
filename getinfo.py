@@ -9,6 +9,7 @@ def getExpertData(experts_url = 'https://www.intergazcert.ru/register/members/ce
     experts_quantity = expert_number_of_lines
     response = requests.get(experts_url, headers=headers)
     soup = BeautifulSoup(response.text, 'lxml')
+
     del response
     gc.collect()
 
@@ -28,6 +29,7 @@ def getExpertData(experts_url = 'https://www.intergazcert.ru/register/members/ce
         department = line2.find(class_='td-5').text
         extra = line2.find(class_='td-6').text
         yield name,date_since, date_until, sphere, okpd_codes, department, extra
+
     del soup, line2, search_lines, name, date_since, date_until, sphere, okpd_codes, department, extra
     gc.collect()
 
@@ -37,6 +39,7 @@ def getCertificateData(certificate_url = 'https://www.intergazcert.ru/register/c
     cert_quantity = cert_number_of_lines
     response = requests.get(certificate_url, headers=headers)
     soup = BeautifulSoup(response.text, 'lxml')
+
     del response
     gc.collect()
 

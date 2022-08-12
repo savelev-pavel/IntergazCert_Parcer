@@ -4,9 +4,6 @@ https://www.intergazcert.ru
 Вдохновлялся этим видео с youtube:
 https://www.youtube.com/watch?v=lOfm04oLD1U&t=4261s
 """
-
-import gc
-
 import getinfo, xlsxwriter
 
 def expertsWriter(experts_info):
