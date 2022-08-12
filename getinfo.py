@@ -5,6 +5,7 @@ headers = {'Accept': '*/*', 'Connection': 'keep-alive', 'User-Agent': 'Mozilla/5
 
 def getExpertData(experts_url = 'https://www.intergazcert.ru/register/members/certification-experts/',
                   expert_number_of_lines=450):
+    """Сбор информации о действующих экспертах"""
     global experts_quantity
     experts_quantity = expert_number_of_lines
     response = requests.get(experts_url, headers=headers)
@@ -35,6 +36,7 @@ def getExpertData(experts_url = 'https://www.intergazcert.ru/register/members/ce
 
 def getCertificateData(certificate_url = 'https://www.intergazcert.ru/register/certificates/active/products/',
                        cert_number_of_lines=1700):
+    """Сбор информации о действующих сертификатах"""
     global cert_quantity
     cert_quantity = cert_number_of_lines
     response = requests.get(certificate_url, headers=headers)

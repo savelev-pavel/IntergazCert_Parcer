@@ -7,6 +7,7 @@ https://www.youtube.com/watch?v=lOfm04oLD1U&t=4261s
 import getinfo, xlsxwriter
 
 def expertsWriter(experts_info):
+    """Запись информации о действующих экспертах в эксель файл"""
     book = xlsxwriter.Workbook(r'Intergazcert_experts.xlsx')
     page = book.add_worksheet('Experts')
 
@@ -42,6 +43,7 @@ def expertsWriter(experts_info):
     book.close()
 
 def certificateWriter(certificate_info):
+    """Запись информации о действующих сертификатах системы в эксель файл"""
     book = xlsxwriter.Workbook(r'Intergazcert_certificates.xlsx')
     page = book.add_worksheet('Certificates')
 
