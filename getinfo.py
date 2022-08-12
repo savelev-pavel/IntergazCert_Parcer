@@ -15,9 +15,11 @@ def getExpertData(experts_url = 'https://www.intergazcert.ru/register/members/ce
     gc.collect()
 
     search_lines = ['tr-'+str(i) for i in range(1, expert_number_of_lines + 1)]
+    line1 = soup.find('tbody')
+    del soup
+    gc.collect()
 
     for _ in search_lines:
-        line1 = soup.find('tbody')
         line2 = line1.find(class_=_)
         if line2 == None:
             experts_quantity = search_lines.index(_)
@@ -31,7 +33,7 @@ def getExpertData(experts_url = 'https://www.intergazcert.ru/register/members/ce
         extra = line2.find(class_='td-6').text
         yield name,date_since, date_until, sphere, okpd_codes, department, extra
 
-    del soup, line2, search_lines, name, date_since, date_until, sphere, okpd_codes, department, extra
+    del line2, search_lines, name, date_since, date_until, sphere, okpd_codes, department, extra
     gc.collect()
 
 def getCertificateData(certificate_url = 'https://www.intergazcert.ru/register/certificates/active/products/',
@@ -46,12 +48,12 @@ def getCertificateData(certificate_url = 'https://www.intergazcert.ru/register/c
     gc.collect()
 
     search_lines = ['tr-'+str(i) for i in range(1, cert_number_of_lines + 1)]
+    line1 = soup.find('tbody')
+    del soup
+    gc.collect()
 
     for _ in search_lines:
-        line1 = soup.find('tbody')
         line2 = line1.find(class_=_)
-        del line1
-        gc.collect
         if line2 == None:
             cert_quantity = search_lines.index(_)
             break
