@@ -1,22 +1,24 @@
-import requests
+import requests, gc
 from bs4 import BeautifulSoup
 
 headers = {'Accept': '*/*', 'Connection': 'keep-alive', 'User-Agent': 'Mozilla/5.0 (Windows NT 6.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36 OPR/56.0.3051.104'}
 
 def getExpertData(experts_url = 'https://www.intergazcert.ru/register/members/certification-experts/',
-                  expert_number_of_lines=414):
+                  expert_number_of_lines=450):
     global experts_quantity
     experts_quantity = expert_number_of_lines
     response = requests.get(experts_url, headers=headers)
     soup = BeautifulSoup(response.text, 'lxml')
+    del response
+    gc.collect()
 
     search_lines = ['tr-'+str(i) for i in range(1, expert_number_of_lines + 1)]
 
-    for i in search_lines:
+    for _ in search_lines:
         line1 = soup.find('tbody')
-        line2 = line1.find(class_=i)
+        line2 = line1.find(class_=_)
         if line2 == None:
-            experts_quantity = search_lines.index(i)
+            experts_quantity = search_lines.index(_)
             break
         name = line2.find(class_='td-0').text
         date_since = line2.find(class_='td-1').text
@@ -26,21 +28,27 @@ def getExpertData(experts_url = 'https://www.intergazcert.ru/register/members/ce
         department = line2.find(class_='td-5').text
         extra = line2.find(class_='td-6').text
         yield name,date_since, date_until, sphere, okpd_codes, department, extra
+    del soup, line2, search_lines, name, date_since, date_until, sphere, okpd_codes, department, extra
+    gc.collect()
 
 def getCertificateData(certificate_url = 'https://www.intergazcert.ru/register/certificates/active/products/',
-                       cert_number_of_lines=2000):
+                       cert_number_of_lines=1700):
     global cert_quantity
     cert_quantity = cert_number_of_lines
     response = requests.get(certificate_url, headers=headers)
     soup = BeautifulSoup(response.text, 'lxml')
+    del response
+    gc.collect()
 
     search_lines = ['tr-'+str(i) for i in range(1, cert_number_of_lines + 1)]
 
-    for i in search_lines:
+    for _ in search_lines:
         line1 = soup.find('tbody')
-        line2 = line1.find(class_=i)
+        line2 = line1.find(class_=_)
+        del line1
+        gc.collect
         if line2 == None:
-            сert_quantity = search_lines.index(i)
+            cert_quantity = search_lines.index(_)
             break
 
         cert_no = line2.find(class_='td-0').text

@@ -1,14 +1,51 @@
 """
-Собираем данные об экспертах в системе добровольной сертификации ИНТЕРГАЗСЕРТ
+Собираем данные об экспертах и действующих сертификатах в системе добровольной сертификации ИНТЕРГАЗСЕРТ
 https://www.intergazcert.ru
 Вдохновлялся этим видео с youtube:
-
+https://www.youtube.com/watch?v=lOfm04oLD1U&t=4261s
 """
+
+import gc
 
 import getinfo, xlsxwriter
 
+def expertsWriter(experts_info):
+    book = xlsxwriter.Workbook(r'Intergazcert_experts.xlsx')
+    page = book.add_worksheet('Experts')
+
+    page.set_column('A:A', 40)
+    page.set_column('B:B', 11)
+    page.set_column('C:C', 10)
+    page.set_column('D:D', 20)
+    page.set_column('E:E', 50)
+    page.set_column('F:F', 30)
+    page.set_column('G:G', 20)
+
+    page.write(0,0,'ФИО')
+    page.write(0,1,'с')
+    page.write(0,2,'по')
+    page.write(0,3,'Область')
+    page.write(0,4,'ОКПД')
+    page.write(0,5,'ЦОС')
+    page.write(0,6,'Примечание')
+
+    row = 1
+    column = 0
+    counter = 0
+    for item in experts_info:
+        page.write(row, column, item[0])
+        page.write(row, column+1, item[1])
+        page.write(row, column+2, item[2])
+        page.write(row, column+3, item[3])
+        page.write(row, column+4, item[4])
+        page.write(row, column+5, item[5])
+        page.write(row, column+6, item[6])
+        row+=1
+        print(f'\r{int((((row-1) / getinfo.experts_quantity) * 100))}% completed',end='')
+    book.close()
+
 def certificateWriter(certificate_info):
-    book = xlsxwriter.Workbook(r'Intergazcert.xlsx')
+    book = xlsxwriter.Workbook(r'Intergazcert_certificates.xlsx')
     page = book.add_worksheet('Certificates')
 
     page.set_column('A:A', 20)
@@ -65,52 +102,17 @@ def certificateWriter(certificate_info):
         page.write(row, column+14, item[14])
         page.write(row, column+15, item[15])
         row+=1
-        completed_percent = int((((row - 1) / getinfo.cert_quantity) * 100))
-        print(f'\r{completed_percent}% completed', end='')
+        print(f'\r{int((((row - 1) / getinfo.cert_quantity) * 100))}% completed', end='')
     book.close()
 
-def expertsWriter(experts_info):
-    book = xlsxwriter.Workbook(r'Intergazcert.xlsx')
-    page = book.add_worksheet('Experts')
-
-    page.set_column('A:A', 40)
-    page.set_column('B:B', 11)
-    page.set_column('C:C', 10)
-    page.set_column('D:D', 20)
-    page.set_column('E:E', 50)
-    page.set_column('F:F', 30)
-    page.set_column('G:G', 20)
-
-    page.write(0,0,'ФИО')
-    page.write(0,1,'с')
-    page.write(0,2,'по')
-    page.write(0,3,'Область')
-    page.write(0,4,'ОКПД')
-    page.write(0,5,'ЦОС')
-    page.write(0,6,'Примечание')
-
-    row = 1
-    column = 0
-    counter = 0
-    for item in experts_info:
-        page.write(row, column, item[0])
-        page.write(row, column+1, item[1])
-        page.write(row, column+2, item[2])
-        page.write(row, column+3, item[3])
-        page.write(row, column+4, item[4])
-        page.write(row, column+5, item[5])
-        page.write(row, column+6, item[6])
-        row+=1
-        completed_percent = int((((row-1) / getinfo.experts_quantity) * 100))
-        print(f'\r{completed_percent}% completed',end='')
-    book.close()
-
+print('Сбор информации об экспертах...')
 expertsWriter(getinfo.getExpertData(expert_number_of_lines = 500))
 print('\r100% completed', end='')
-print('\nИнформация об экспертах сохранена!')
-certificateWriter(getinfo.getCertificateData(cert_number_of_lines = 2000))
+print('\nИнформация об экспертах сохранена!\n')
+
+print('Сбор информации о действующих сертификатах...')
+certificateWriter(getinfo.getCertificateData(cert_number_of_lines = 1700))
 print('\r100% completed', end='')
-print('\nИнформация о действующих сертификатах сохранена!')
-print('COMPLETED')
+print('\nИнформация о действующих сертификатах сохранена!\n')
 
-
+print('ЗАВЕРШЕНО УСПЕШНО')
