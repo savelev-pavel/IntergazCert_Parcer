@@ -1,4 +1,5 @@
-"""Собираем данные об экспертах в системе добровольной сертификации ИНТЕРГАЗСЕРТ"""
+"""Собираем данные об экспертах в системе добровольной сертификации ИНТЕРГАЗСЕРТ
+    https://www.intergazcert.ru"""
 
 import requests, xlsxwriter
 from bs4 import BeautifulSoup
@@ -35,8 +36,6 @@ def getExpertData(number_of_lines):
 def expertsWriter(experts_info):
     book = xlsxwriter.Workbook(r'Intergazcert.xlsx')
     page = book.add_worksheet('Experts')
-    row = 1
-    column = 0
 
     page.set_column('A:A', 40)
     page.set_column('B:B', 11)
@@ -56,7 +55,6 @@ def expertsWriter(experts_info):
 
     row = 1
     column = 0
-
     for item in experts_info:
         page.write(row, column, item[0])
         page.write(row, column+1, item[1])
@@ -66,10 +64,7 @@ def expertsWriter(experts_info):
         page.write(row, column+5, item[5])
         page.write(row, column+6, item[6])
         row+=1
-
     book.close()
-
-
 
 expertsWriter(getExpertData(414))          #number of lines to collect
 print('Parcing successful!')
